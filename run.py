@@ -46,7 +46,7 @@ maxcm = int(sys.argv[2])
 accfl = sys.argv[3]
 plus = int(sys.argv[4])
 targ = sys.argv[5]
-logf = "../stats/log"
+logf = "stats/log"
 print("the plus is ",plus)
 acccount = 0
 to = 0
@@ -135,7 +135,7 @@ def cacheids(file):
 
 def disconnect(info):
     usernamep = info.username.replace('\n','')
-    cname = "../botc/"+usernamep
+    cname = "botc/"+usernamep
     pickle.dump( browser.get_cookies() , open(cname,"wb"))
     # browser.get(info.profile)
     # sleep(1)
@@ -151,7 +151,7 @@ def disconnect(info):
 def signin(info):
     browser.get('https://www.instagram.com/')
     username = info.username.replace('\n','')
-    cname = "../botc/"+username
+    cname = "botc/"+username
     cookies = pickle.load(open(cname, "rb"))
     sleep(2)
     for cookie in cookies:
@@ -189,7 +189,7 @@ def loadacc(afile, tfile):
         username = afile[a]
         filenamen = str(username)
         filenameb = filenamen.replace('\n', '')
-        filenameb = "../acc/"+filenameb+".txt"
+        filenameb = "acc/"+filenameb+".txt"
         msgb = open(filenameb, "r+")
         a += 1
         targetn = int(afile[a]) + plus
@@ -318,7 +318,7 @@ def testban(x):
             print("BANNED !!!")
             filenamen = str(info.username)
             filename = filenamen.replace('\n', '')
-            fileac = "../acc/"+filename+".txt"
+            fileac = "acc/"+filename+".txt"
             msgb = open(fileac, "r+")
             msgb.truncate(0)
             msgb.write("1")
@@ -341,10 +341,10 @@ def testban(x):
 likecount = 0
 maxretry = randrange(25, 55)
 tfile = cachefile(targ)
-cfilee = cachefile("../cmt.txt")
+cfilee = cachefile("cmt.txt")
 cfile = [i.replace('\n','') for i in cfilee]
 afile = cachefile(accfl)
-ids = open("../ids.txt","r+", encoding="UTF-8")
+ids = open("ids.txt","r+", encoding="UTF-8")
 tem = ids.readlines()
 ids.close()
 temp = [i.replace('\n','') for i in tem]
@@ -355,7 +355,7 @@ info = loadacc(afile, tfile)
 
 filenamen = str(info.username)
 filenameb = filenamen.replace('\n', '')
-filenameb = "../acc/"+filenameb+".txt"
+filenameb = "acc/"+filenameb+".txt"
 print(filenameb)
 msgb = open(filenameb, "r+")
 msgbc = msgb.read(5)
@@ -376,7 +376,7 @@ while 1:
 
     print("y is : ", y)
     print(info.max)
-    ids = open("../ids.txt","a+")
+    ids = open("ids.txt","a+")
     x = 1
     sleep(1)
     # print("-/-/-//-/-/-/-/-/-/-/  ")
@@ -393,7 +393,7 @@ while 1:
         filename = filenamen.split('/', 5)[3]
         if (filename == "explore"):
             filename = filenamen.split('/', 6)[5]+"-tag"
-        filename = "../stats/"+filename+".txt"
+        filename = "stats/"+filename+".txt"
         stats = open(filename, "a+")
         t = time.localtime()
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", t)
@@ -419,7 +419,7 @@ while 1:
         y = 0
         filenamen = str(info.username)
         filenameb = filenamen.replace('\n', '')
-        filenameb = "../acc/"+filenameb+".txt"
+        filenameb = "acc/"+filenameb+".txt"
         print(filenameb)
         msgb = open(filenameb, "r+")
         msgbc = msgb.read(5)
