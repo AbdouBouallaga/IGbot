@@ -233,7 +233,7 @@ def reloadtn(info):
     print(info.username)
     print(info.target)
     print(postid)
-    return(postid)
+    return(info)
 
 def reloadt(info):
     browser.get(info.target)
@@ -247,7 +247,7 @@ def reloadt(info):
     try:
         postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info = accd(info.username, info.target, 4)
+        info = accd(info.username, info.target, 5)
         print("error id")
         browser.get(info.target)
         sleep(5)
@@ -373,7 +373,7 @@ print(";o;;o;o;o; this is the content")
 print(info.ban)
 msgb.close
 
-postid = reloadtn(info)
+info = reloadtn(info)
 i = 0
 j = 0
 x = 1
