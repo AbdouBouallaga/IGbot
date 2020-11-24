@@ -9,6 +9,10 @@ import time
 import sys
 import pickle
 # import winsound
+
+mincm = int(sys.argv[1])
+maxcm = int(sys.argv[2])
+
 class accd:
     def __init__(self, username, target, div):
         self.username = username
@@ -49,8 +53,7 @@ browser = webdriver.Firefox(firefox_binary="/usr/bin/firefox-esr", firefox_optio
 
 browser.implicitly_wait(4)
 count = randrange(0, 36)
-mincm = int(sys.argv[1])
-maxcm = int(sys.argv[2])
+
 accfl = sys.argv[3]
 plus = int(sys.argv[4])
 targ = sys.argv[5]
