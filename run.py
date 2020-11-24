@@ -9,13 +9,13 @@ import time
 import sys
 import pickle
 # import winsound
-
-xpid = "/html/body/div[5]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
-xplike = "/html/body/div[5]/div[2]/div/article/div[3]/section[1]/span[1]/button"
-xpcomment = "/html/body/div[5]/div[2]/div/article/div[3]/section[3]/div/form"
-xpcommentext = "/html/body/div[5]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
-xpcommentsend = "/html/body/div[5]/div[2]/div/article/div[3]/section[3]/div/form/button"
-xpcommentcheck = "/html/body/div[5]/div[2]/div/article/div[3]"
+div = 5
+xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
+xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
+xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
+xpcommentext = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
+xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
+xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]"
 tfp = "/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a/div/div[2]"
 
 
@@ -211,6 +211,7 @@ def reloadtn(info):
     try:
         postid = browser.find_element_by_xpath(xpid).get_attribute("href")
     except:
+        div = 4
         print("error id")
         browser.find_element_by_xpath("/html").send_keys(u'\ue012')
         sleep(5)
@@ -240,6 +241,7 @@ def reloadt(info):
     try:
         postid = browser.find_element_by_xpath(xpid).get_attribute("href")
     except:
+        div = 4
         print("error id")
         browser.get(info.target)
         sleep(5)
