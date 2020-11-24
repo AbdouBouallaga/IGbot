@@ -292,7 +292,7 @@ def check2():
     print("search comments")
     cm = browser.find_element_by_xpath(xpcommentcheck).text
     # print(cm)
-    if "vovim" in str(cm) or "hannahmartin*" in str(cm) or "vootty" in str(cm) or "Rabat" in str(cm) or "india" in str(cm) or "amartina" in str(cm) or "mumbai" in str(cm):
+    if "vovim" in str(cm) or "hannahmartin*" in str(cm) or "vootty" in str(cm) or "Rabat" in str(cm) or "india" in str(cm) or "amartina" in str(cm) or "pitpethouse" in str(cm):
         print("found in comments")
         return(0)
     else:
