@@ -9,13 +9,21 @@ import time
 import sys
 import pickle
 # import winsound
-div = 5
-xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
-xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
-xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
-xpcommentext = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
-xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
-xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]"
+class accd:
+    def __init__(self, username, target, div):
+        self.username = username
+        self.target = target
+        self.ban = 5
+        self.max = randrange(mincm, maxcm)
+        self.div = div
+
+info = accd(0, 0, 5)
+xpid = "/html/body/div["+str(info.div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
+xplike = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
+xpcomment = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
+xpcommentext = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
+xpcommentsend = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
+xpcommentcheck = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]"
 tfp = "/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a/div/div[2]"
 
 
@@ -75,12 +83,7 @@ def dataon():
     os.system('adb shell ip -4 addr show rmnet0')
 
 
-class accd:
-    def __init__(self, username, target):
-        self.username = username
-        self.target = target
-        self.ban = 5
-        self.max = randrange(mincm, maxcm)
+
 
 def likeandcomment(cfile, count):
     a = count%25
@@ -195,7 +198,7 @@ def loadacc(afile, tfile):
         targetn = int(afile[a]) + plus
         targetn = int(targetn) % int(targetsnumber)
         target = tfile[targetn - 1]
-        info = accd(username, target)
+        info = accd(username, target, 5)
         h = msgb.read(5)
         msgb.close()
         a += 1
@@ -211,7 +214,7 @@ def reloadtn(info):
     try:
         postid = browser.find_element_by_xpath(xpid).get_attribute("href")
     except:
-        div = 4
+        info.div = 4
         print("error id")
         browser.find_element_by_xpath("/html").send_keys(u'\ue012')
         sleep(5)
@@ -241,7 +244,7 @@ def reloadt(info):
     try:
         postid = browser.find_element_by_xpath(xpid).get_attribute("href")
     except:
-        div = 4
+        info.div = 4
         print("error id")
         browser.get(info.target)
         sleep(5)
