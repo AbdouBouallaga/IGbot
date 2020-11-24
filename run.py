@@ -212,20 +212,40 @@ def loadacc(afile, tfile):
     signin(info)
     return(info)
 
+def fixdiv(info):
+    sleep(3)
+    info = accd(info.username, info.target, 5)
+    try:
+        browser.find_element_by_xpath(info.xpid).get_attribute("href")
+    except:
+        info = accd(info.username, info.target, 4)
+        print("error id")
+    finally:
+        print("no error")
+    print("Div fixed")
+    return(info)
+
 def reloadtn(info):
     sleep(3)
     try:
         postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info = accd(info.username, info.target, 4)
         print("error id")
+        browser.find_element_by_xpath("/html").send_keys(u'\ue012')
+        sleep(5)
+        browser.find_element_by_xpath("/html").send_keys(u'\ue012')
+        sleep(5)
+        browser.find_element_by_xpath("/html").send_keys(u'\ue014')
+        sleep(8)
+        browser.find_element_by_xpath("/html").send_keys(u'\ue014')
+        sleep(8)
         postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     finally:
         print("got the id")
     print(info.username)
     print(info.target)
     print(postid)
-    return(info)
+    return(postid)
 
 def reloadt(info):
     browser.get(info.target)
@@ -239,7 +259,6 @@ def reloadt(info):
     try:
         postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info = accd(info.username, info.target, 5)
         print("error id")
         browser.get(info.target)
         sleep(5)
@@ -365,7 +384,8 @@ print(";o;;o;o;o; this is the content")
 print(info.ban)
 msgb.close
 
-info = reloadtn(info)
+info = fixdiv(info)
+postid = reloadtn(info)
 i = 0
 j = 0
 x = 1
@@ -416,6 +436,7 @@ while 1:
         echec = 0
         sleep(15)
         info = loadacc(afile, tfile)
+        info = fixdiv(info)
         i = 0
         y = 0
         filenamen = str(info.username)
