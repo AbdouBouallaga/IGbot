@@ -219,14 +219,6 @@ def reloadtn(info):
     except:
         info = accd(info.username, info.target, 4)
         print("error id")
-        browser.find_element_by_xpath("/html").send_keys(u'\ue012')
-        sleep(5)
-        browser.find_element_by_xpath("/html").send_keys(u'\ue012')
-        sleep(5)
-        browser.find_element_by_xpath("/html").send_keys(u'\ue014')
-        sleep(8)
-        browser.find_element_by_xpath("/html").send_keys(u'\ue014')
-        sleep(8)
         postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     finally:
         print("got the id")
