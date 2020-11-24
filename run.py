@@ -405,6 +405,7 @@ while 1:
         stats.write("\n")
         stats.close()
         disconnect(info)
+        sleep(300)
         acccount += 2
         if acccount == to:
             quitp(info)
