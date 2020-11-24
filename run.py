@@ -19,15 +19,15 @@ class accd:
         self.target = target
         self.ban = 5
         self.max = randrange(mincm, maxcm)
-        self.div = div
+        self.xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
+        self.xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
+        self.xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
+        self.xpcommentext = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
+        self.xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
+        self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]"
 
 info = accd(0, 0, 5)
-xpid = "/html/body/div["+str(info.div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
-xplike = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
-xpcomment = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
-xpcommentext = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
-xpcommentsend = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
-xpcommentcheck = "/html/body/div["+str(info.div)+"]/div[2]/div/article/div[3]"
+
 tfp = "/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a/div/div[2]"
 
 
@@ -92,14 +92,14 @@ def likeandcomment(cfile, count):
     a = count%25
     b = randrange(0, 2)
     try:
-        browser.find_element_by_xpath(xplike).click()
+        browser.find_element_by_xpath(info.xplike).click()
         sleep(2 + b)
-        browser.find_element_by_xpath(xpcomment).click()
+        browser.find_element_by_xpath(info.xpcomment).click()
         sleep(1)
         print("clicked")
-        browser.find_element_by_xpath(xpcommentext).send_keys(cfile[a])
+        browser.find_element_by_xpath(info.xpcommentext).send_keys(cfile[a])
         sleep(1.5)
-        browser.find_element_by_xpath(xpcommentsend).click()
+        browser.find_element_by_xpath(info.xpcommentsend).click()
         sleep(4 + b)
     except:
         print("likedchs")
@@ -215,9 +215,9 @@ def loadacc(afile, tfile):
 def reloadtn(info):
     sleep(3)
     try:
-        postid = browser.find_element_by_xpath(xpid).get_attribute("href")
+        postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info.div = 4
+        info = accd(info.username, info.target, 4)
         print("error id")
         browser.find_element_by_xpath("/html").send_keys(u'\ue012')
         sleep(5)
@@ -227,7 +227,7 @@ def reloadtn(info):
         sleep(8)
         browser.find_element_by_xpath("/html").send_keys(u'\ue014')
         sleep(8)
-        postid = browser.find_element_by_xpath(xpid).get_attribute("href")
+        postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     finally:
         print("got the id")
     print(info.username)
@@ -245,15 +245,15 @@ def reloadt(info):
         browser.find_element_by_xpath(tfp).click()
     sleep(5)
     try:
-        postid = browser.find_element_by_xpath(xpid).get_attribute("href")
+        postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info.div = 4
+        info = accd(info.username, info.target, 4)
         print("error id")
         browser.get(info.target)
         sleep(5)
         browser.find_element_by_xpath(tfp).click()
         sleep(3)
-        postid = browser.find_element_by_xpath(xpid).get_attribute("href")
+        postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     finally:
         print("got the id")
     print(info.username)
@@ -287,7 +287,7 @@ def check():
     print("checking likes")
     classe = "NULL"
     try:
-        classe = browser.find_element_by_xpath(xpid).get_attribute("title")
+        classe = browser.find_element_by_xpath(info.xpid).get_attribute("title")
     except:
         print("notfound")
         return(1)
@@ -298,7 +298,7 @@ def check():
 
 def check2():
     print("search comments")
-    cm = browser.find_element_by_xpath(xpcommentcheck).text
+    cm = browser.find_element_by_xpath(info.xpcommentcheck).text
     # print(cm)
     if "vovim" in str(cm) or "hannahmartin*" in str(cm) or "vootty" in str(cm) or "Rabat" in str(cm) or "india" in str(cm) or "amartina" in str(cm) or "pitpethouse" in str(cm):
         print("found in comments")
