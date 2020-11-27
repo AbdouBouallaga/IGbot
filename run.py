@@ -20,13 +20,13 @@ class accd:
         self.ban = 5
         self.max = randrange(mincm, maxcm)
         self.xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/a"
-        self.xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
+        self.xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
         self.xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
         self.xpcommentext = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
         self.xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
         self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/div[1]/div/div[2]"
 
-info = accd(0, 0, 5)
+info = accd(0, 0, 4)
 
 tfp = "/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a/div/div[2]"
 
@@ -205,7 +205,7 @@ def loadacc(afile, tfile):
         targetn = int(afile[a]) + plus
         targetn = int(targetn) % int(targetsnumber)
         target = tfile[targetn - 1]
-        info = accd(username, target, 5)
+        info = accd(username, target, 4)
         h = msgb.read(5)
         msgb.close()
         a += 1
@@ -218,11 +218,11 @@ def loadacc(afile, tfile):
 
 def fixdiv(info):
     sleep(3)
-    info = accd(info.username, info.target, 5)
+    info = accd(info.username, info.target, 4)
     try:
         browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info = accd(info.username, info.target, 4)
+        info = accd(info.username, info.target, 5)
         print("error id")
     finally:
         print("no error")
