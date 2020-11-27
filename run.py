@@ -19,12 +19,12 @@ class accd:
         self.target = target
         self.ban = 5
         self.max = randrange(mincm, maxcm)
-        self.xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
-        self.xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
+        self.xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/a"
+        self.xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
         self.xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
         self.xpcommentext = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
         self.xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
-        self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]"
+        self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/div[1]/div/div[2]"
 
 info = accd(0, 0, 5)
 
@@ -314,7 +314,7 @@ def check():
 def check2():
     print("search comments")
     cm = browser.find_element_by_xpath(info.xpcommentcheck).text
-    # print(cm)
+    print(cm)
     if "vovim" in str(cm) or "hannahmartin*" in str(cm) or "vootty" in str(cm) or "Rabat" in str(cm) or "india" in str(cm) or "amartina" in str(cm) or "pitpethouse" in str(cm):
         print("found in comments")
         return(0)
