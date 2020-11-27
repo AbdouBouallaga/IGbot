@@ -331,7 +331,7 @@ def testban(x):
             ban = browser.find_element_by_xpath("/html/body/div[3]/div/div/button")
         except:
             try:
-                ban = browser.find_element_by_xpath("/html/body/div[6]/div/div/div/div[2]/button[2]")
+                ban = browser.find_element_by_xpath("/html/body/div[5]/div/div/div/div[2]/button[2]")
             except:
                 print("not banned")
                 return(x)
