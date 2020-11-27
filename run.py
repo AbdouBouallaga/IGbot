@@ -24,7 +24,7 @@ class accd:
         self.xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
         self.xpcommentext = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
         self.xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
-        self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/div[1]/div/div[2]"
+        self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/div[1]/div"
 
 info = accd(0, 0, 4)
 
