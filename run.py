@@ -47,9 +47,13 @@ if sys.argv[6] == "1":
     opti = "--headless"
     print(">>>>>>>>Headless<<<<<<<<  \n", opti)
 
+ida = randrange(250135922, 250135926)
+
 options = Options()
 options.add_argument(opti)
-browser = webdriver.Firefox(firefox_binary="/usr/bin/firefox-esr", firefox_options=options)
+profile = webdriver.FirefoxProfile()
+profile.set_preference("general.useragent.override", "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 163.0.0.41.120 (iPhone12,1; iOS 14_0_1; en_US; en-US; scale=2.00; 828x1792; "+ida+")")
+browser = webdriver.Firefox(firefox_binary="/usr/bin/firefox-esr", firefox_options=options, firefox_profile=profile)
 
 browser.implicitly_wait(4)
 count = randrange(0, 36)
