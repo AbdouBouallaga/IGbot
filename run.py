@@ -104,6 +104,11 @@ def likeandcomment(cfile, count):
         browser.find_element_by_xpath(info.xpcommentext).send_keys(cfile[a])
         sleep(1.5)
         browser.find_element_by_xpath(info.xpcommentsend).click()
+        sleep(1.5)
+        try:
+            browser.find_element_by_xpath(info.xpcommentsend).click()
+        except:
+            print("already clicked")
         sleep(4 + b)
     except:
         print("likedchs")
