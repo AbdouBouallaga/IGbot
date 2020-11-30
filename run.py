@@ -390,6 +390,7 @@ maxretry = randrange(25, 55)
 
 
 filenamen = str(info.username)
+print(filenamen)
 filenameb = filenamen.replace('\n', '')
 filenameb = "acc/"+filenameb+".txt"
 print(filenameb)
