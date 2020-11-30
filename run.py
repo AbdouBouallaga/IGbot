@@ -13,6 +13,11 @@ import pickle
 mincm = int(sys.argv[1])
 maxcm = int(sys.argv[2])
 
+def cachefile(file):
+    print(file," loaded")
+    f= open(file,"r", encoding="UTF-8")
+    return(f.readlines())
+
 class accd:
     def __init__(self, username, target, div, ip):
         self.username = username
@@ -176,10 +181,7 @@ def previous(count):
             print("previous")
     return(count)
 
-def cachefile(file):
-    print(file," loaded")
-    f= open(file,"r", encoding="UTF-8")
-    return(f.readlines())
+
 
 def cacheids(file):
     print("ids handler")
