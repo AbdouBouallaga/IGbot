@@ -91,6 +91,8 @@ profile.set_preference("network.proxy.ssl", info.ip)
 profile.set_preference("network.proxy.ssl_port", 3199)
 profile.set_preference("network.proxy.socks", info.ip)
 profile.set_preference("network.proxy.socks_port", 3199)
+profile.set_preference("general.useragent.override", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36")
+profile.update_preferences()
 browser = webdriver.Firefox(firefox_binary="/usr/bin/firefox-esr", firefox_options=options, firefox_profile=profile)
 
 browser.implicitly_wait(4)
