@@ -14,10 +14,11 @@ mincm = int(sys.argv[1])
 maxcm = int(sys.argv[2])
 
 class accd:
-    def __init__(self, username, target, div):
+    def __init__(self, username, target, div, ip):
         self.username = username
         self.target = target
         self.ban = 5
+        self.ip = ip
         self.max = randrange(mincm, maxcm)
         self.xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
         self.xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
@@ -26,7 +27,7 @@ class accd:
         self.xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
         self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]"
 
-info = accd(0, 0, 5)
+info = accd(0, 0, 5, 0)
 
 tfp = "/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a/div/div[2]"
 
@@ -47,11 +48,6 @@ if sys.argv[6] == "1":
     opti = "--headless"
     print(">>>>>>>>Headless<<<<<<<<  \n", opti)
 
-options = Options()
-options.add_argument(opti)
-browser = webdriver.Firefox(firefox_binary="/usr/bin/firefox-esr", firefox_options=options)
-
-browser.implicitly_wait(4)
 count = randrange(0, 36)
 
 accfl = sys.argv[3]
@@ -59,7 +55,7 @@ plus = int(sys.argv[4])
 targ = sys.argv[5]
 logf = "stats/log"
 print("the plus is ",plus)
-acccount = 0
+acccount = 1
 to = 0
 with open(accfl, 'r') as f:
     for line in f:
@@ -68,6 +64,58 @@ targetsnumber = 0
 with open(targ, 'r') as f:
     for line in f:
         targetsnumber += 1
+
+def loadacc(afile, tfile):
+    h = 1
+    a = acccount
+    while (1):
+        if a == to:
+            browser.close()
+            exit()
+        ip = str(afile[0])
+        username = afile[a]
+        filenamen = str(username)
+        filenameb = filenamen.replace('\n', '')
+        filenameb = "acc/"+filenameb+".txt"
+        msgb = open(filenameb, "r+")
+        a += 1
+        targetn = int(afile[a]) + plus
+        targetn = int(targetn) % int(targetsnumber)
+        target = tfile[targetn - 1]
+        info = accd(username, target, 5, ip)
+        h = msgb.read(5)
+        msgb.close()
+        a += 1
+        print("H is ", h)
+        print("at >>", username)
+        if h == "0":
+            break
+    signin(info)
+    return(info)
+
+tfile = cachefile(targ)
+cfilee = cachefile("cmt.txt")
+cfile = [i.replace('\n','') for i in cfilee]
+afile = cachefile(accfl)
+ids = open("ids.txt","r+", encoding="UTF-8")
+tem = ids.readlines()
+ids.close()
+temp = [i.replace('\n','') for i in tem]
+info = loadacc(afile, tfile)
+
+profile = webdriver.FirefoxProfile()
+options = Options()
+options.add_argument(opti)
+profile.set_preference("network.proxy.type", 1)
+profile.set_preference("network.proxy.http", info.ip)
+profile.set_preference("network.proxy.http_port", 3199)
+profile.set_preference("network.proxy.ssl", info.ip)
+profile.set_preference("network.proxy.ssl_port", 3199)
+profile.set_preference("network.proxy.socks", info.ip)
+profile.set_preference("network.proxy.socks_port", 3199)
+browser = webdriver.Firefox(firefox_binary="/usr/bin/firefox-esr", firefox_options=options, firefox_profile=profile)
+
+browser.implicitly_wait(4)
 
 print(f"total targers are ",targetsnumber)
 print(mincm)
@@ -185,40 +233,14 @@ def signin(info):
         # sleep(5)
         browser.find_element_by_xpath(tfp).click()
   
-def loadacc(afile, tfile):
-    h = 1
-    a = acccount
-    while (1):
-        if a == to:
-            browser.close()
-            exit()
-        username = afile[a]
-        filenamen = str(username)
-        filenameb = filenamen.replace('\n', '')
-        filenameb = "acc/"+filenameb+".txt"
-        msgb = open(filenameb, "r+")
-        a += 1
-        targetn = int(afile[a]) + plus
-        targetn = int(targetn) % int(targetsnumber)
-        target = tfile[targetn - 1]
-        info = accd(username, target, 5)
-        h = msgb.read(5)
-        msgb.close()
-        a += 1
-        print("H is ", h)
-        print("at >>", username)
-        if h == "0":
-            break
-    signin(info)
-    return(info)
 
 def fixdiv(info):
     sleep(3)
-    info = accd(info.username, info.target, 5)
+    info = accd(info.username, info.target, 5, info.ip)
     try:
         browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info = accd(info.username, info.target, 4)
+        info = accd(info.username, info.target, 4, info.ip)
         print("error id")
     finally:
         print("no error")
@@ -359,18 +381,11 @@ def testban(x):
 
 likecount = 0
 maxretry = randrange(25, 55)
-tfile = cachefile(targ)
-cfilee = cachefile("cmt.txt")
-cfile = [i.replace('\n','') for i in cfilee]
-afile = cachefile(accfl)
-ids = open("ids.txt","r+", encoding="UTF-8")
-tem = ids.readlines()
-ids.close()
-temp = [i.replace('\n','') for i in tem]
+
 # print("+*+*+*+*+*+*+*+*\n")
 # print(temp)
 # print("+*+*+*+*+*+*+*+*\n")
-info = loadacc(afile, tfile)
+
 
 filenamen = str(info.username)
 filenameb = filenamen.replace('\n', '')
