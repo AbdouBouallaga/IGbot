@@ -380,7 +380,7 @@ def testban(x):
             sleep(0.5)
             # winsound.Beep(frequency, duration)
             return(2)
-
+info = loadacc(afile, tfile)
 likecount = 0
 maxretry = randrange(25, 55)
 
@@ -401,7 +401,7 @@ info.ban = msgbc
 print(";o;;o;o;o; this is the content")
 print(info.ban)
 msgb.close
-info = loadacc(afile, tfile)
+
 info = fixdiv(info)
 postid = reloadtn(info)
 i = 0
