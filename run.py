@@ -70,34 +70,6 @@ with open(targ, 'r') as f:
     for line in f:
         targetsnumber += 1
 
-def loadacc(afile, tfile):
-    h = 1
-    a = acccount
-    while (1):
-        if a == to:
-            browser.close()
-            exit()
-        ip = str(afile[0])
-        username = afile[a]
-        filenamen = str(username)
-        filenameb = filenamen.replace('\n', '')
-        filenameb = "acc/"+filenameb+".txt"
-        msgb = open(filenameb, "r+")
-        a += 1
-        targetn = int(afile[a]) + plus
-        targetn = int(targetn) % int(targetsnumber)
-        target = tfile[targetn - 1]
-        info = accd(username, target, 5, ip)
-        h = msgb.read(5)
-        msgb.close()
-        a += 1
-        print("H is ", h)
-        print("at >>", username)
-        if h == "0":
-            break
-    signin(info)
-    return(info)
-
 tfile = cachefile(targ)
 cfilee = cachefile("cmt.txt")
 cfile = [i.replace('\n','') for i in cfilee]
@@ -106,7 +78,8 @@ ids = open("ids.txt","r+", encoding="UTF-8")
 tem = ids.readlines()
 ids.close()
 temp = [i.replace('\n','') for i in tem]
-info = loadacc(afile, tfile)
+ip = afile[0]
+info = accd(0, 0, 5, str(ip))
 
 profile = webdriver.FirefoxProfile()
 options = Options()
@@ -235,6 +208,33 @@ def signin(info):
         # sleep(5)
         browser.find_element_by_xpath(tfp).click()
   
+def loadacc(afile, tfile):
+    h = 1
+    a = acccount
+    while (1):
+        if a == to:
+            browser.close()
+            exit()
+        ip = str(afile[0])
+        username = afile[a]
+        filenamen = str(username)
+        filenameb = filenamen.replace('\n', '')
+        filenameb = "acc/"+filenameb+".txt"
+        msgb = open(filenameb, "r+")
+        a += 1
+        targetn = int(afile[a]) + plus
+        targetn = int(targetn) % int(targetsnumber)
+        target = tfile[targetn - 1]
+        info = accd(username, target, 5, ip)
+        h = msgb.read(5)
+        msgb.close()
+        a += 1
+        print("H is ", h)
+        print("at >>", username)
+        if h == "0":
+            break
+    signin(info)
+    return(info)
 
 def fixdiv(info):
     sleep(3)
@@ -400,7 +400,7 @@ info.ban = msgbc
 print(";o;;o;o;o; this is the content")
 print(info.ban)
 msgb.close
-
+info = loadacc(afile, tfile)
 info = fixdiv(info)
 postid = reloadtn(info)
 i = 0
