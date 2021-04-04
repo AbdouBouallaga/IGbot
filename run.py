@@ -2,6 +2,7 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver import Firefox
+from selenium.webdriver.common.keys import Keys
 from random import randrange
 import codecs
 import os
@@ -9,26 +10,59 @@ import time
 import sys
 import pickle
 # import winsound
+from selenium.webdriver.common.alert import Alert
+import zipfile
+import os
 
 mincm = int(sys.argv[1])
 maxcm = int(sys.argv[2])
+plus = int(sys.argv[4])
 
-def cachefile(file):
-    print(file," loaded")
-    f= open(file,"r", encoding="UTF-8")
-    return(f.readlines())
+ip = "ProxyIp"
+port = "ProxyPort"
+user = "ProxyUser"
+
+browser = 0
+
+def get_chromedriver(use_proxy=False, user_agent=None):
+    path = os.path.dirname(os.path.abspath(__file__))
+    chrome_options = webdriver.ChromeOptions()
+    if use_proxy:
+        pluginfile = 'proxy_auth_plugin.zip'
+        with zipfile.ZipFile(pluginfile, 'w') as zp:
+            zp.writestr("manifest.json", manifest_json)
+            zp.writestr("background.js", background_js)
+        chrome_options.add_extension(pluginfile)
+        chrome_prefs = {}
+        chrome_options.experimental_options["prefs"] = chrome_prefs
+        chrome_prefs["profile.default_content_settings"] = {"images": 2}
+        chrome_prefs["profile.managed_default_content_settings"] = {"images": 2}
+        chrome_options.add_argument('--disable-images')
+    if user_agent:
+        chrome_options.add_argument('--user-agent=%s' % user_agent)
+    driver = webdriver.Chrome(
+        os.path.join(path, 'chromedriver'),
+        chrome_options=chrome_options)
+    return driver
+
+def initbrowser():
+    
+    browser = get_chromedriver(use_proxy=True)
+    browser.implicitly_wait(5)
+    browser.get('https://www.google.com')
+    return(browser)
 
 class accd:
-    def __init__(self, username, target, div, ip):
+    def __init__(self, username, target, div, passwd):
         self.username = username
+        self.passwd = passwd
         self.target = target
         self.ban = 5
-        self.ip = ip
         self.max = randrange(mincm, maxcm)
         self.xpid = "/html/body/div["+str(div)+"]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a"
         self.xplike = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[1]/span[1]/button"
-        self.xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form"
-        self.xpcommentext = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
+        self.xpcomment = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div"
+        self.xpcommentext = "/html/body/div[5]/div[2]/div/article/div[3]/section[3]/div/form/textarea"
         self.xpcommentsend = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]/section[3]/div/form/button"
         self.xpcommentcheck = "/html/body/div["+str(div)+"]/div[2]/div/article/div[3]"
 
@@ -36,66 +70,23 @@ info = accd(0, 0, 5, 0)
 
 tfp = "/html/body/div[1]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a/div/div[2]"
 
-
-# firefox_profile = webdriver.FirefoxProfile()
-# firefox_profile.set_preference('permissions.default.image', 2)
-# browser = webdriver.Firefox(firefox_profile=firefox_profile)
-
-# firefox_profile = webdriver.FirefoxProfile()
-# firefox_profile.set_preference('permissions.default.image', 2)
-# options = Options()
-# options.add_argument("--headless")
-# browser = webdriver.Firefox(firefox_options=options, firefox_profile=firefox_profile)
-
-opti = ""
-
-if sys.argv[6] == "1":
-    opti = "--headless"
-    print(">>>>>>>>Headless<<<<<<<<  \n", opti)
-
 count = randrange(0, 36)
 
 accfl = sys.argv[3]
 plus = int(sys.argv[4])
 targ = sys.argv[5]
-logf = "stats/log"
-print("the plus is ",plus)
-acccount = 1
+logf = "../log/log"
+print("sleep ",plus)
+acccount = 0
 to = 0
 with open(accfl, 'r') as f:
     for line in f:
         to += 1
+to = 1
 targetsnumber = 0
 with open(targ, 'r') as f:
     for line in f:
         targetsnumber += 1
-
-tfile = cachefile(targ)
-cfilee = cachefile("cmt.txt")
-cfile = [i.replace('\n','') for i in cfilee]
-afile = cachefile(accfl)
-ids = open("ids.txt","r+", encoding="UTF-8")
-tem = ids.readlines()
-ids.close()
-temp = [i.replace('\n','') for i in tem]
-ip = afile[0]
-info = accd(0, 0, 5, str(ip))
-
-profile = webdriver.FirefoxProfile()
-options = Options()
-# options.add_argument(opti)
-# profile.set_preference("network.proxy.type", 1)
-# profile.set_preference("network.proxy.http", info.ip)
-# profile.set_preference("network.proxy.http_port", 3199)
-# profile.set_preference("network.proxy.ssl", info.ip)
-# profile.set_preference("network.proxy.ssl_port", 3199)
-# profile.set_preference("network.proxy.socks", info.ip)
-# profile.set_preference("network.proxy.socks_port", 3199)
-# profile.set_preference("general.useragent.override", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36")
-profile.update_preferences()
-browser = webdriver.Firefox(firefox_binary="/usr/bin/firefox-esr", firefox_options=options, firefox_profile=profile)
-
-browser.implicitly_wait(4)
 
 print(f"total targers are ",targetsnumber)
 print(mincm)
@@ -105,6 +96,7 @@ print("max acc is")
 print(to)
 
 def dataoff():
+    sleep(6)
     os.system('adb shell sh /storage/EA5D-2D07/dataoff.sh')
     sleep(20)
 
@@ -125,10 +117,16 @@ def likeandcomment(cfile, count):
         browser.find_element_by_xpath(info.xpcomment).click()
         sleep(1)
         print("clicked")
-        browser.find_element_by_xpath(info.xpcommentext).send_keys(cfile[a])
-        sleep(1.5)
-        browser.find_element_by_xpath(info.xpcommentsend).click()
-        sleep(4 + b)
+        print(cfile[a])
+        browser.find_element_by_xpath(info.xpcomment).click()
+        print("clicked1")
+        cmtemp = cfile[a]
+        cmtemp.replace("\n","")
+        print(cmtemp)
+        browser.find_element_by_xpath(info.xpcommentext).send_keys(str(cmtemp))
+        print("comment written")
+        sleep(2)
+        browser.find_element_by_xpath(info.xpcommentext).submit()
     except:
         print("likedchs")
 
@@ -156,7 +154,10 @@ def previous(count):
             print("previous")
     return(count)
 
-
+def cachefile(file):
+    print(file," loaded")
+    f= open(file,"r", encoding="UTF-8")
+    return(f.readlines())
 
 def cacheids(file):
     print("ids handler")
@@ -166,7 +167,7 @@ def cacheids(file):
 
 def disconnect(info):
     usernamep = info.username.replace('\n','')
-    cname = "botc/"+usernamep
+    cname = "../botc/"+usernamep
     pickle.dump( browser.get_cookies() , open(cname,"wb"))
     # browser.get(info.profile)
     # sleep(1)
@@ -182,7 +183,7 @@ def disconnect(info):
 def signin(info):
     browser.get('https://www.instagram.com/')
     username = info.username.replace('\n','')
-    cname = "botc/"+username
+    cname = "../botc/"+username
     cookies = pickle.load(open(cname, "rb"))
     sleep(2)
     for cookie in cookies:
@@ -202,6 +203,11 @@ def signin(info):
     # sleep(4)
     browser.get(info.target)
     sleep(3)
+    sleep(2)
+    try:
+        browser.find_element_by_xpath("/html/body/div[2]/div/div/div/div[2]/button[1]").click()
+    except:
+        print("cockie already accepted")
     try:
         browser.find_element_by_xpath("/html/body/div[1]/section/main/article/div[1]/div/div/div[1]/div[1]").click()
     except:
@@ -209,25 +215,28 @@ def signin(info):
         # browser.find_element_by_xpath("/html/body/div[1]/section/main/div/div[2]/a[3]").click()
         # sleep(5)
         browser.find_element_by_xpath(tfp).click()
-  
+
 def loadacc(afile, tfile):
     h = 1
-    a = acccount
+    a = acccount    
     while (1):
-        if a == to:
-            browser.close()
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", a)
+        if a >= to:
+            try:
+                browser.close()
+            except:
+                print("exit")
             exit()
-        ip = str(afile[0])
         username = afile[a]
+        a+=1
+        passwd = afile[a]
+        passwd.replace('\n', '')
         filenamen = str(username)
         filenameb = filenamen.replace('\n', '')
-        filenameb = "acc/"+filenameb+".txt"
+        filenameb = "../acc/"+filenameb+".txt"
         msgb = open(filenameb, "r+")
-        a += 1
-        targetn = int(afile[a]) + plus
-        targetn = int(targetn) % int(targetsnumber)
-        target = tfile[targetn - 1]
-        info = accd(username, target, 5, ip)
+        target = tfile[0]
+        info = accd(username, target, 5, passwd)
         h = msgb.read(5)
         msgb.close()
         a += 1
@@ -235,16 +244,16 @@ def loadacc(afile, tfile):
         print("at >>", username)
         if h == "0":
             break
-    signin(info)
+    
     return(info)
 
 def fixdiv(info):
     sleep(3)
-    info = accd(info.username, info.target, 5, info.ip)
+    info = accd(info.username, info.target, 5 ,info.passwd)
     try:
         browser.find_element_by_xpath(info.xpid).get_attribute("href")
     except:
-        info = accd(info.username, info.target, 4, info.ip)
+        info = accd(info.username, info.target, 4, info.passwd)
         print("error id")
     finally:
         print("no error")
@@ -293,6 +302,11 @@ def reloadt(info):
         postid = browser.find_element_by_xpath(info.xpid).get_attribute("href")
     finally:
         print("got the id")
+    sleep(2)
+    try:
+        browser.find_element_by_xpath("/html/body/div[2]/div/div/div/div[2]/button[1]").click()
+    except:
+        print("cockie already accepted")
     print(info.username)
     print(info.target)
     print(postid)
@@ -337,7 +351,7 @@ def check2():
     print("search comments")
     cm = browser.find_element_by_xpath(info.xpcommentcheck).text
     # print(cm)
-    if "vovim" in str(cm) or "hannahmartin*" in str(cm) or "vootty" in str(cm) or "Rabat" in str(cm) or "india" in str(cm) or "amartina" in str(cm) or "pitpethouse" in str(cm):
+    if "vovim" in str(cm) or "hannahmartin" in str(cm) or "vootty" in str(cm) or "Rabat" in str(cm) or "india" in str(cm) or "amartina" in str(cm) or "pitpethouse" in str(cm):
         print("found in comments")
         return(0)
     else:
@@ -353,17 +367,20 @@ def testban(x):
             ban = browser.find_element_by_xpath("/html/body/div[2]/div/div/button")
         except:
             try:
-                ban = browser.find_element_by_xpath("/html/body/div[6]/div/div/div/div[2]/button[2]")
+                ban = browser.find_element_by_xpath("/html/body/div[5]/div/div/div/div[2]/button[2]")
             except:
-                print("not banned")
-                return(x)
+                try:
+                    ban = browser.find_element_by_xpath("/html/body/div[6]/div/div/div/div[2]/button[2]")
+                except:
+                    print("not banned")
+                    return(x)
     finally:
         if ban != "NULL":
             print(info.username)
             print("BANNED !!!")
             filenamen = str(info.username)
             filename = filenamen.replace('\n', '')
-            fileac = "acc/"+filename+".txt"
+            fileac = "../acc/"+filename+".txt"
             msgb = open(fileac, "r+")
             msgb.truncate(0)
             msgb.write("1")
@@ -382,21 +399,91 @@ def testban(x):
             sleep(0.5)
             # winsound.Beep(frequency, duration)
             return(2)
-info = loadacc(afile, tfile)
-likecount = 0
-maxretry = randrange(25, 55)
 
+likecount = 0
+maxretry = randrange(55, 175)
+tfile = cachefile(targ)
+cfilee = cachefile("cmtt.txt")
+cfile = [i.replace('\n','') for i in cfilee]
+afile = cachefile(accfl)
+ids = open("../ids.txt","r+", encoding="UTF-8")
+tem = ids.readlines()
+ids.close()
+temp = [i.replace('\n','') for i in tem]
 # print("+*+*+*+*+*+*+*+*\n")
 # print(temp)
 # print("+*+*+*+*+*+*+*+*\n")
+info = loadacc(afile, tfile)
+###############################################################################################################################################################################
+PROXY_HOST = ip  # rotating proxy
+PROXY_PORT = port
+PROXY_USER = user
+PROXY_PASS = info.passwd
 
+manifest_json = """
+{
+    "version": "1.0.0",
+    "manifest_version": 2,
+    "name": "Chrome Proxy",
+    "permissions": [
+        "proxy",
+        "tabs",
+        "unlimitedStorage",
+        "storage",
+        "<all_urls>",
+        "webRequest",
+        "webRequestBlocking"
+    ],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "minimum_chrome_version":"22.0.0"
+}
+"""
 
+background_js = """
+var config = {
+        mode: "fixed_servers",
+        rules: {
+          singleProxy: {
+            scheme: "http",
+            host: "%s",
+            port: parseInt(%s)
+          },
+          bypassList: ["localhost"]
+        }
+      };
+
+chrome.proxy.settings.set({value: config, scope: "regular"}, function() {});
+
+function callbackFn(details) {
+    return {
+        authCredentials: {
+            username: "%s",
+            password: "%s"
+        }
+    };
+}
+
+chrome.webRequest.onAuthRequired.addListener(
+            callbackFn,
+            {urls: ["<all_urls>"]},
+            ['blocking']
+);
+""" % (PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASS)
+###############################################################################################################################################################################
+browser = initbrowser()
+signin(info)
 filenamen = str(info.username)
-print(filenamen)
 filenameb = filenamen.replace('\n', '')
-filenameb = "acc/"+filenameb+".txt"
+filenameb = "../acc/"+filenameb+".txt"
 print(filenameb)
-msgb = open(filenameb, "r+")
+try:
+    msgb = open(filenameb, "r+")
+except:
+    msgb = open(filenameb, "w+")
+    msgb.truncate(0)
+    msgb.write("0")
 msgbc = msgb.read(5)
 print("*****************>>>>", msgbc)
 info.ban = msgbc
@@ -416,7 +503,7 @@ while 1:
 
     print("y is : ", y)
     print(info.max)
-    ids = open("ids.txt","a+")
+    ids = open("../ids.txt","a+")
     x = 1
     sleep(1)
     # print("-/-/-//-/-/-/-/-/-/-/  ")
@@ -433,7 +520,7 @@ while 1:
         filename = filenamen.split('/', 5)[3]
         if (filename == "explore"):
             filename = filenamen.split('/', 6)[5]+"-tag"
-        filename = "stats/"+filename+".txt"
+        filename = "../mystats/"+filename+".txt"
         stats = open(filename, "a+")
         t = time.localtime()
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", t)
@@ -445,7 +532,7 @@ while 1:
         stats.write("\n")
         stats.close()
         disconnect(info)
-        sleep(300)
+        sleep(120)
         acccount += 2
         if acccount == to:
             quitp(info)
@@ -454,16 +541,21 @@ while 1:
         # print("-----------------------changing ip----------------------")
         # dataon()
         echec = 0
-        sleep(15)
+        sleep(5)
         info = loadacc(afile, tfile)
         info = fixdiv(info)
         i = 0
         y = 0
         filenamen = str(info.username)
         filenameb = filenamen.replace('\n', '')
-        filenameb = "acc/"+filenameb+".txt"
+        filenameb = "../acc/"+filenameb+".txt"
         print(filenameb)
-        msgb = open(filenameb, "r+")
+        try:
+            msgb = open(filenameb, "r+")
+        except:
+            msgb = open(filenameb, "w+")
+            msgb.truncate(0)
+            msgb.write("0")
         msgbc = msgb.read(5)
         print("*****************>>>>", msgbc)
         info.ban = msgbc
